@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D战棋</title>
+    <script src="../js/axios-0.18.0.js"></script>
+    <script src="../js/vue.js"></script>
+</head>
+<link rel="stylesheet" href="../css/index.css">
+
+<body>
+    <div class="cloud">
+        <img src="../res/backGround/yun1.png" alt="">
+        <img src="../res/backGround/yun2.png" alt="">
+        <img src="../res/backGround/yun3.png" alt="">
+        <img src="../res/backGround/yun1.png" alt="">
+        <img src="../res/backGround/yun2.png" alt="">
+        <img src="../res/backGround/yun2.png" alt="">
+        <img src="../res/backGround/yun3.png" alt="">
+    </div>
+    <main>
+        <div class="container" id="options">
+            <h1>创建地图</h1>
+
+            <!-- 地图大小滑块 -->
+            <label for="mapSize"><span class="mapSizeSpan">选择地图大小 (4-16): </span></label><br>
+            <input type="range" id="mapSize" min="4" max="16" value="8" step="1">
+            <div id="mapSizeValue">8</div><br>
+
+            <!-- 草的占比滑块 -->
+            <label for="grassRatio"><span class="grassSpan">草的占比 (1-64):</span></label><br>
+            <input type="range" id="grassRatio" min="1" max="64" value="64" step="1">
+            <div id="grassRatioValue">64</div><br>
+
+            <!-- 山的占比滑块 -->
+            <label for="mountainRatio"><span class="mountainSpan">山的占比 (1-64): </span></label><br>
+            <input type="range" id="mountainRatio" min="1" max="64" value="1" step="1">
+            <div id="mountainRatioValue">1</div><br>
+
+            <!-- 湖泊的占比滑块 -->
+            <label for="lakeRatio"><span class="lakeSpan">湖泊的占比 (1-64): </span></label><br>
+            <input type="range" id="lakeRatio" min="1" max="64" value="1" step="1">
+            <div id="lakeRatioValue">1</div><br>
+
+            <!-- 树的占比滑块 -->
+            <label for="treeRatio"><span class="treeSpan">树的占比 (1-64): </span></label><br>
+            <input type="range" id="treeRatio" min="1" max="64" value="1" step="1">
+            <div id="treeRatioValue">1</div><br>
+            <!-- 生成地图按钮 -->
+            <button id="generateMap">生成地图</button>
+            
+        </div>
+        <div class="username">
+            <span class="blue">蓝方名字</span>
+            <input type="text" id="blueName"><br>
+            
+            <span class="red">红方名字</span>
+            <input type="text" id="redName"><br>
+            
+        </div>
+    </main>
+    <div class="big-box">
+        <div class="control-panel">
+
+            <div class="top">
+                <div>当前玩家: <br><span id="currentPlayer">BluePlayer</span></div>
+                <div>当前金币: <span id="currentGold">500</span></div>
+                <button id="nextTurn" style="display:none;">下个回合</button><br><br>
+            </div>
+
+
+            <div class="bottom">
+                <div class="build">
+                    <ul>
+                        <li>
+                            <div class="unit-image" data-unit="soldier"></div>
+                            <div class="unit-info">步兵 (75 金币)</div>
+                        </li>
+                        <li>
+                            <div class="unit-image" data-unit="car"></div>
+                            <div class="unit-info">装甲车 (200 金币)</div>
+                        </li>
+                        <li>
+                            <div class="unit-image" data-unit="tank"></div>
+                            <div class="unit-info">坦克 (350 金币)</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="mapContainer" class="mapContainer">
+            <div id="map" class="map"></div>
+        </div>
+    </div>
+    <!-- 玩家信息栏 -->
+    <div class="player-information">
+        <h1>玩家排行榜</h1>
+        <table border="none" cellspacing="0" width="80%" id="app">
+            <tr>
+                <th>排名</th>
+                <th>玩家名字</th>
+                <th>获胜次数</th>
+            </tr>
+            <tr v-for="(item,index) in playerList">
+                <th>{{index + 1}}</th>
+                <th>{{item.playerName}}</th>
+                <th>{{item.playerWinner}}</th>
+            </tr>
+        </table>
+                <!-- <button id="prevPage" @click="prevPage" :disabled="currentPage === 1">上一页</button>
+        <button id="nextPage" @click="nextPage" :disabled="currentPage === totalPages">下一页</button> -->
+    </div>
+    <script src="../js/index.js"></script>
+</body>
+
+</html>

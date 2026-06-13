@@ -1,0 +1,507 @@
+@background-color: skyblue;
+@tile-size: 80px;
+@control-panel-space: 100px;
+@menu-color: color(#e0d8bd);
+@menu-border: color(#575755);
+@menu-button: color(#b59b7e);
+
+@keyframes cloud-left {
+  to {
+    transform: translateX(600px);
+  }
+}
+
+@keyframes cloud-right {
+  to {
+    transform: translateX(-700px);
+  }
+}
+
+.cloud {
+  z-index: -1;
+  img {
+    position: absolute;
+    &:nth-child(1) {
+      top: 5px;
+      right: 30px;
+      animation: cloud-right 10s 0.4s infinite alternate linear;
+    }
+    &:nth-child(2) {
+      top: 70px;
+      left: 30px;
+      animation: cloud-left 8s infinite alternate linear;
+    }
+    &:nth-child(3) {
+      top: 300px;
+      right: 30px;
+      animation: cloud-right 7s infinite alternate linear;
+    }
+    &:nth-child(4) {
+      top: 200px;
+      left: 30px;
+      animation: cloud-left 12s 0.5s infinite alternate linear;
+    }
+    &:nth-child(5) {
+      top: 740px;
+      right: 30px;
+      animation: cloud-right 9s 0.2s infinite alternate linear;
+    }
+    &:nth-child(6) {
+      top: 480px;
+      left: 30px;
+      animation: cloud-left 4s 0.5s infinite alternate linear;
+    }
+    &:nth-child(7) {
+      bottom: 40px;
+      right: 30px;
+      animation: cloud-right 15s 0.3s infinite alternate linear;
+    }
+  }
+}
+
+* {
+  text-decoration: none;
+  list-style-type: none;
+}
+/* 隐藏滚动条 */
+html {
+  overflow: hidden;
+  height: 100%;
+  
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Body 样式 */
+body {
+  background-color: @background-color;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 50px;
+  box-sizing: border-box;
+  overflow: auto; /* 恢复页面整体的滚动条 */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 水平居中内容 */
+}
+
+/* 地图容器样式 */
+.mapContainer {
+  border: 8px solid #575755;
+  border-radius: 5px;
+  overflow: auto; /* 允许滚动查看地图 */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* 从顶部开始对齐 */
+  margin-top: 20px; /* 设置地图的顶部外边距 */
+  display: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.big-box {
+  display: none;
+  .control-panel {
+    
+    border-radius: 25px;
+    // position: fixed;
+    top: 100px;
+    width: 130px;
+    height: 600px;
+    background-color: ghostwhite;
+    border: 4px solid @menu-border;
+    position: absolute;
+    left: 10px;
+    .top {
+      text-align: center;
+      margin-top: 10px;
+      border-bottom: 4px solid @menu-border;
+      div {
+        margin-top: 5px;
+      }
+      div:first-child {
+        font-weight: 700;
+        color: steelblue;
+        span{
+          color: blue;
+        }
+      }
+      div:nth-child(2) {
+        font-weight: 900;
+        color: goldenrod;
+      }
+      button {
+        margin: 0 auto;
+        margin-top: 20px;
+        width: 100px;
+        height: 40px;
+        border-radius: 5px;
+        background-color: skyblue;
+        font-style: inherit;
+        font-weight: 1000;
+        cursor: pointer;
+      }
+    }
+    .bottom {
+      .build {
+        ul {
+          text-align: center;
+
+          padding: 0; 
+          margin: 0; 
+          li {
+            margin: 0 auto;
+            width: 80px;
+            height: 120px;
+            justify-content: center; 
+            align-items: center; 
+            display: flex; 
+            flex-direction: column; 
+            margin-top: 10px;
+            border: 3px solid @menu-border;
+            pointer-events: auto; 
+            cursor: pointer;
+            .unit-info {
+              color: #575755;
+              font-weight: 600;
+            }
+            .unit-image {
+              width: 70px;
+              height: 70px;
+            }
+            &:first-child {
+              .unit-image {
+                background-image: url(../res/chess/blue-soldier.png);
+                background-size: cover;
+              }
+            }
+            &:nth-child(2) {
+              .unit-image {
+                background-image: url(../res/chess/blue-car.png);
+                background-size: cover;
+              }
+            }
+            &:last-child {
+              .unit-image {
+                background-image: url(../res/chess/blue-tank.png);
+                background-size: cover;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* 地图样式 */
+.map {
+  display: grid; /* 使用 grid 布局 */
+  grid-template-columns: repeat(auto-fill, @tile-size); /* 固定瓦片宽度 */
+  position: relative;
+}
+
+/* 瓦片样式 */
+.tile {
+  width: @tile-size; /* 瓦片固定大小 */
+  height: @tile-size; /* 瓦片固定大小 */
+  position: relative; /* 保持 tile 的相对定位，以便让树定位在瓦片内 */
+  transition: transform 0.2s, box-shadow 0.2s; /* 增加平滑效果 */
+
+  &:hover {
+    box-sizing: border-box;
+    border: 4px solid @menu-color;
+    // transform: translateY(-10px) scale(1.1); /* 鼠标点击时向 Y 轴移动 10px 并放大 */
+    // box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* 高亮效果 */
+  }
+}
+
+/* 草地样式 */
+.grass {
+  // background-image: url("../res/glass.png");
+  // background-size: cover;
+  background-color: rgb(13, 160, 16);
+}
+
+/* 山样式 */
+.mountain {
+  background-color: rgb(99, 98, 98);
+}
+
+/* 湖泊样式 */
+.lake {
+  background-color: rgb(26, 104, 239);
+}
+
+/* 树样式 */
+.tree {
+  position: absolute; /* 绝对定位以便在 grass 上垂直居中 */
+  top: 50%;
+  left: 50%;
+  width: 40px; /* 树的大小设置为比草地瓦片小 */
+  height: 40px;
+  transform: translate(-50%, -50%); /* 使树在 grass 上垂直居中 */
+  background-image: url("../res/tree.png");
+  background-size: cover;
+  pointer-events: none; /* 防止树层被点击 */
+}
+
+main {
+  display: flex;
+  /* 控制面板容器样式 */
+  .container {
+    width: 400px;
+    height: 700px;
+    background-color: burlywood;
+    border-radius: 10px;
+    border: 4px solid brown;
+    text-align: center;
+    position: relative; /* 使容器相对定位 */
+    z-index: 10; /* 确保在地图之上 */
+    margin-bottom: 20px; /* 增加与地图的间距，防止遮挡 */
+    h1 {
+      color: brown;
+    }
+    label {
+      span {
+        font-weight: 800;
+        font-size: 20px;
+      }
+      .mapSizeSpan {
+        color: chocolate;
+      }
+      .grassSpan {
+        color: rgb(36, 108, 36);
+      }
+      .mountainSpan {
+        color: gray;
+      }
+      .lakeSpan {
+        color: #1890ff;
+      }
+      .treeSpan {
+        color: green;
+      }
+    }
+    div {
+      font-weight: 800;
+      font-size: 20px;
+    }
+    #mapSizeValue {
+      color: chocolate;
+    }
+    #grassRatioValue {
+      color: rgb(36, 108, 36);
+    }
+    #mountainRatioValue {
+      color: gray;
+    }
+    #lakeRatioValue {
+      color: #1890ff;
+    }
+    #treeRatioValue {
+      color: green;
+    }
+    #generateMap{
+        width: 150px;
+        height: 50px;
+        
+        border-radius: 25px;
+        background-color:yellowgreen;
+        font-style: inherit;
+        font-weight: 1000;
+        font-size: 20px;
+        cursor: pointer;
+    }
+  }
+  .username{
+    margin-left: 15px;
+    background-color: burlywood;
+    border-radius: 10px;
+    border: 4px solid brown;
+    width: 200px;
+    height: 120px;
+    text-align: center;
+    input{
+      vertical-align: middle;
+      background-color: bisque;
+      border: 2px solid brown;
+      &:focus{
+        outline: none;
+        border-style: solid;
+        box-shadow: 0 0 15px brown;
+      }
+    }
+    span{
+      font-size: large;
+      font-weight: 700;
+      margin-top: 30px;
+      
+    }
+    .blue{
+      color: blue;
+    }
+    .red{
+      color: red;
+    }
+  }
+}
+
+input[type="range"] {
+  appearance: none;
+  width: 300px;
+  border-radius: 10px; /* 这个属性设置使填充进度条时的图形为圆角 */
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 25px;
+    width: 25px;
+    background: @menu-button;
+    border-radius: 50%; /* 外观设置为圆形 */
+  }
+  &::-webkit-slider-runnable-track {
+    background-color: @menu-color;
+    border-radius: 10px; /* 将轨道设为圆角的 */
+  }
+}
+
+/* 棋子样式 */
+.chess {
+  position: absolute; /* 绝对定位以便在瓦片内居中 */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 使棋子在瓦片内垂直居中 */
+  width: 50px; /* 根据需要设置棋子的大小 */
+  height: 50px;
+  pointer-events: auto; /* 允许棋子被点击 */
+  cursor: pointer; /* 鼠标悬浮在棋子上时变为指针，表明可交互 */
+}
+.tank {
+  width: 50px;
+  height: 50px;
+  // background-color: black;
+  background-size: cover;
+}
+.soldier {
+  width: 50px;
+  height: 50px;
+  // background-color: black;
+  background-size: cover;
+}
+.car {
+  width: 50px;
+  height: 50px;
+  // background-color: black;
+  background-size: cover;
+}
+.Blue-tank {
+  background-image: url(../res/chess/blue-tank.png);
+}
+.Blue-soldier {
+  background-image: url(../res/chess/blue-soldier.png);
+}
+.Blue-car {
+  background-image: url(../res/chess/blue-car.png);
+}
+.Blue-home {
+  background-image: url(../res/chess/blue-home.png);
+}
+
+.Red-tank {
+  background-image: url(../res/chess/red-tank.png);
+}
+.Red-soldier {
+  background-image: url(../res/chess/red-soldier.png);
+}
+.Red-car {
+  background-image: url(../res/chess/red-car.png);
+}
+.Red-home {
+  background-image: url(../res/chess/red-home.png);
+}
+.home {
+  position: absolute; /* 绝对定位以便在瓦片内居中 */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 使棋子在瓦片内垂直居中 */
+  width: 50px; /* 根据需要设置棋子的大小 */
+  height: 50px;
+  pointer-events: auto; /* 允许棋子被点击 */
+  cursor: pointer; /* 鼠标悬浮在棋子上时变为指针，表明可交互 */
+  background-size: cover;
+}
+
+.highlight-home-area {
+  border-color: azure;
+}
+#map {
+  max-width: 800px;
+  max-height: 800px;
+  overflow-x: scroll;
+  scroll-behavior:smooth;
+  &::-webkit-scrollbar {
+    border-radius: 10%;
+  }
+  &::-webkit-scrollbar-track {
+    // display: none;
+    background-color: burlywood;
+  }
+  &::-webkit-scrollbar-thumb {
+    /*滚动条里面小方块*/
+    border-radius: 10px;
+    background-color: brown;
+  }
+  &::-webkit-scrollbar-corner {
+    background-color: burlywood;
+  }
+}
+.player-information{
+  position: absolute;
+  right: 15px;
+  top: 100px;
+  width: 300px;
+  height: 700px;
+  background-color: burlywood;
+  border-radius: 10px;
+  border: 4px solid brown;
+  text-align: center;
+  h1{
+    color: brown;
+  }
+  table{
+    margin: 0 auto;
+    tr{
+      background-color: beige;
+    }
+  }
+}
+
+// @media (max-width: 480px) {
+//   body {
+//     padding: 10px;
+//     flex-direction: column;
+//   }
+
+//   .control-panel {
+//     display: none; /* 隐藏控制面板，简化布局 */
+//   }
+
+//   .map {
+//     grid-template-columns: repeat(auto-fill, 40px); /* 再次缩小瓦片大小 */
+//   }
+// }
+
+// @media (max-width: 1800px) {
+//   .player-information {
+//     display: none; /* 隐藏玩家排行榜 */
+//   }
+// }
+
+@media (max-width: 1480px) {
+  .map{
+    width: 600px;
+    height: 600px;
+  }
+}
